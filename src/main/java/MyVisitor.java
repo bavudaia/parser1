@@ -63,6 +63,8 @@ public class MyVisitor extends GenericVisitorAdapter<String,Object> {
 		}
 		//if(!n.isInterface())
 			res = res +"|";
+			List<String> getterList = new LinkedList<String>();
+			List<String> setterList = new LinkedList<String>();
 		if(!fields.isEmpty())
 		{
 			for(FieldDeclaration field : fields)
@@ -70,9 +72,15 @@ public class MyVisitor extends GenericVisitorAdapter<String,Object> {
 				//boolean getterFlag=false,setterFlag=false;
 				int modifier = field.getModifiers();			
 				String x = "";
-				
+				List<VariableDeclarator> variables = field.getVariables();
+				for(VariableDeclarator variable : variables){
+					String variableName = variable.getId().getName();
+					getterList.add(Utils.getGetterMethodName(variableName));
+					setterList.add(Utils.getSetterMethodName(variableName));
+				}
 				if(modifier==1 || modifier == 2)
 				{
+
 					x +=  field.accept(this, arg);
 					if(x!=null)
 					{	res = res + x; } 
@@ -94,10 +102,20 @@ public class MyVisitor extends GenericVisitorAdapter<String,Object> {
 		{			
 			for(MethodDeclaration method : methods)
 			{
-				
-				String x = method.accept(this, arg);
-				if(x != null)
-				{	res = res+x; }
+				int methodModifier = method.getModifiers();
+				// methodModifier = 1 => public
+				// methodModifier = 9 => public static
+				if(methodModifier == 1 || methodModifier == 9){
+				//	String methodName = method.getName();
+				//	if(methodName!=null && !getterList.contains(methodName) && !setterList.contains(methodName)
+				//			&&	!methodName.substring(0, 3).equals("get")						//Adhoc condition
+				//			&&   !methodName.substring(0, 3).equals("set")                        //Adhoc condtion
+				//			){
+						String x = method.accept(this, arg);
+						if(x != null)
+						{	res = res+x; }
+					//}
+				}
 			}
 		}
 		return res;
@@ -121,7 +139,7 @@ public class MyVisitor extends GenericVisitorAdapter<String,Object> {
 		{
 			for(VariableDeclarator variable : variables)
 			{
-				res = res+variable.getId().toString()+":"+typeName+";";
+				res = res + variable.getId().toString()+":"+typeName+";";
 			}
 		}
 		//n.getChildrenNodes().

@@ -104,6 +104,16 @@ public class RelVisitor extends GenericVisitorAdapter<String, Object>{
 				{
 					typeParams.add(typeName);
 				}
+				String arrow = Lines.HAS_ARROW;
+				for(String typeParam : typeParams){
+					if(typeParam!= null && (
+							typeParam.equals("Collection")
+							|| typeParam.equals("Set")
+							|| typeParam.equals("List")
+							|| typeParam.contains("[]")
+							))
+						arrow = Lines.HAS_MANY_ARROW;
+				}
 				for(String typeParam : typeParams)
 				{
 					boolean flag = true;
@@ -111,7 +121,7 @@ public class RelVisitor extends GenericVisitorAdapter<String, Object>{
 					{
 						String classNameFromUML = Utils.getClassName(classVar);
 						if(typeParam!= null && typeParam.equals(classNameFromUML)){
-							res = res + Utils.constructHasARelationShipClass(currentClassOrInterfaceName,classNameFromUML);
+							res = res + Utils.constructHasARelationShipClass(currentClassOrInterfaceName,classNameFromUML,arrow);
 							flag = false; break;
 						}
 					}
@@ -120,7 +130,7 @@ public class RelVisitor extends GenericVisitorAdapter<String, Object>{
 						{
 							String interfaceNameFromUML = Utils.getInterfaceName(interfaceVar);
 							if(typeParam!= null && typeParam.equals(interfaceNameFromUML)){								
-								res = res + Utils.constructHasARelationShipInterface(currentClassOrInterfaceName,interfaceVar);break;
+								res = res + Utils.constructHasARelationShipInterface(currentClassOrInterfaceName,interfaceVar,arrow);break;
 							}
 						}
 					}
@@ -228,7 +238,8 @@ public class RelVisitor extends GenericVisitorAdapter<String, Object>{
 		/* use the usesList to formulate relationship diagram*/
 		for(String typeParam : usesList)
 		{
-			boolean flag = true;
+			//boolean flag = true;
+			/*   Commenting this part : Uses a relationship to be shown only when a class/interface uses a INTERFACE
 			for(String classVar : myClassVarList)
 			{
 				String classNameFromUML = Utils.getClassName(classVar);
@@ -237,7 +248,8 @@ public class RelVisitor extends GenericVisitorAdapter<String, Object>{
 					flag = false; break;
 				}
 			}
-			if(flag){
+			*/
+			//if(flag){
 				for(String interfaceVar : myInterfaceVarList)
 				{
 					String interfaceNameFromUML = Utils.getInterfaceName(interfaceVar);
@@ -245,7 +257,7 @@ public class RelVisitor extends GenericVisitorAdapter<String, Object>{
 						res = res + Utils.constructUsesARelationShipInterface(currentClassOrInterfaceName,interfaceVar);break;
 					}
 				}
-			}
+			//}
 		}
 		return res;
 	} 

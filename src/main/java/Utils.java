@@ -13,6 +13,30 @@ import com.github.javaparser.ast.type.Type;
 
 public class Utils {
 	
+	public static String getGetterMethodName(String field){
+		String methodName = "";
+		if(field!=null)
+		{
+			methodName += "get";
+			methodName +=(field.substring(0,1)).toUpperCase();
+			methodName += field.substring(1,field.length());
+		}
+		
+		return methodName;
+	}
+	
+	public static String getSetterMethodName(String field){
+		String methodName = "";
+		if(field!=null)
+		{
+			methodName += "set";
+			methodName +=(field.substring(0,1)).toUpperCase();
+			methodName += field.substring(1,field.length());
+		}
+		
+		return methodName;
+	}
+	
 	public static String getTypeForUMLString(String typeName){
 		if(typeName!=null){
 			typeName = typeName.replace("<", "\uFF1C");
@@ -21,24 +45,24 @@ public class Utils {
 		return typeName;
 	}
 	
-	public static String constructHasARelationShipClass(String className, String type){
+	public static String constructHasARelationShipClass(String className, String type,String arrow){
 		String res = "";
 		res = res +"[";
 		res = res + className;
 		res = res + "]";
-		res = res + Lines.HAS_ARROW;
+		res = res + arrow;
 		res = res + "[";
 		res = res + type;
 		res = res + "]";
 		res = res +"\n";
 		return res;
 	}
-	public static String constructHasARelationShipInterface(String className, String interfaceVar){
+	public static String constructHasARelationShipInterface(String className, String interfaceVar, String arrow){
 		String res = "";
 		res = res +"[";
 		res = res + className;
 		res = res + "]";
-		res = res + Lines.HAS_ARROW;
+		res = res + arrow;
 		res = res + interfaceVar;
 		return res;
 	}

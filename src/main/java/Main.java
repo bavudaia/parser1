@@ -11,7 +11,9 @@ public class Main {
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
 		
-		File folder = new File(FolderName.tc5);
+		//File folder = new File(FolderName.tc2);
+		System.out.println(args[0]);
+		File folder = new File(args[0]);
 		File[] files = folder.listFiles();
 
 		String classString = "";
@@ -35,7 +37,6 @@ public class Main {
 		for(int i=0;i<files.length;i++)
 		{
 			File f = files[i];
-			
 			if(f.isFile())
 			{
 				String fileName = f.getName();
@@ -48,7 +49,7 @@ public class Main {
 					x = cu.accept(new RelVisitor(), classString);
 					if(x!=null)
 						relString+=x;
-				}	
+				}
 			}
 		}
 		String resultYuml = classString + relString;
